@@ -15,7 +15,6 @@ class Command(BaseCommand):
 
         for company in companies:
             _ = Company.objects.create(
-                id=int(company['id']),
                 name=company['title'],
                 location=company['location'],
                 logo=company['logo'],
@@ -25,7 +24,6 @@ class Command(BaseCommand):
 
         for job in jobs:
             _ = Vacancy.objects.create(
-                id=int(job['id']),
                 title=job['title'],
                 specialty=Specialty.objects.get(code=job['specialty']),
                 company=Company.objects.get(id=int(job['company'])),

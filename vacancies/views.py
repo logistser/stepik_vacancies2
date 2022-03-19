@@ -1,7 +1,12 @@
 from django.views.generic.base import TemplateView
+from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import Http404
+from django.db.models import Count
 from vacancies.models import Specialty, Company, Vacancy
+from vacancies.forms import LoginForm, SignupForm
 
 
 class MainView(TemplateView):
@@ -9,9 +14,8 @@ class MainView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['specialties'] = Specialty.objects.all()
-        context['companies'] = Company.objects.all()
-        context['vacancies'] = Vacancy.objects.all()
+        context['specialties'] = Specialty.objects.annotate(vacancies_count=Count('vacancies'))
+        context['companies'] = Company.objects.annotate(vacancies_count=Count('vacancies'))
         return context
 
 
@@ -60,6 +64,24 @@ class VacancyView(TemplateView):
         except Vacancy.DoesNotExist:
             raise Http404("Извините, но вакансии, к которой вы пытаетесь получить доступ, не существует.")
         return context
+
+
+class LoginView(LoginView):
+    template_name = 'login.html'
+    form_class = LoginForm
+    model = User
+    redirect_authenticated_user = True
+
+
+class LogoutView(LogoutView):
+    template_name = 'logout.html'
+
+
+class SignupView(CreateView):
+    template_name = 'signup.html'
+    form_class = SignupForm
+    model = User
+    success_url = '/login'
 
 
 def custom_handler404(request, exception):

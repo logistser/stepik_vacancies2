@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  <main class="container mt-3">
+    <section>
+      {% load crispy_forms_tags %}
+      {% crispy form %}
+
+      <div class="mt-5">
+        Нет учетной записи?<a type="button" class="btn btn-link" href="/register/">Регистрация</a>
+      </div>
+    </section>
+  </main>
+{% endblock %}

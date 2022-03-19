@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-eu+(ok&i_1-l_g3q6_xrcp-8*m5027(q8s**xxjjl!zi)@$)ji'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vacancies',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -106,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC+3'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -119,7 +120,23 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Media files
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media'
+MEDIA_COMPANY_IMAGE_DIR = 'company_images'
+MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
+
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

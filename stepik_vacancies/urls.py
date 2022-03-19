@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.conf import settings
+from django.conf.urls.static import static
 from vacancies.views import MainView, AllVacanciesView, SpecialtyVacanciesView, CompanyView, VacancyView,\
-    custom_handler404, custom_handler500
+    LoginView, LogoutView, SignupView, custom_handler404, custom_handler500
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -24,8 +26,14 @@ urlpatterns = [
     re_path(r'^vacancies/cat/([\w-]+)/', SpecialtyVacanciesView.as_view(), name='specialization'),
     re_path(r'^companies/([\d-]+)/', CompanyView.as_view(), name='company'),
     re_path(r'^vacancies/([\d-]+)/', VacancyView.as_view(), name='vacancy'),
+    path('register/', SignupView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = custom_handler404
 handler500 = custom_handler500
