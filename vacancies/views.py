@@ -3,10 +3,10 @@ from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.db.models import Count
-from vacancies.models import Specialty, Company, Vacancy
-from vacancies.forms import LoginForm, SignupForm
+from vacancies.models import Specialty, Company, Vacancy, Application
+from vacancies.forms import LoginForm, SignupForm, ApplicationForm
 
 
 class MainView(TemplateView):
@@ -69,7 +69,6 @@ class VacancyView(TemplateView):
 class LoginView(LoginView):
     template_name = 'login.html'
     form_class = LoginForm
-    model = User
     redirect_authenticated_user = True
 
 
@@ -80,8 +79,22 @@ class LogoutView(LogoutView):
 class SignupView(CreateView):
     template_name = 'signup.html'
     form_class = SignupForm
-    model = User
     success_url = '/login'
+
+
+class ApplicationView(CreateView):
+    template_name = 'vacancy-application.html'
+    form_class = ApplicationForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        try:
+            obj = form.save(commit=False)
+            obj.vacancy = Vacancy.objects.get(id=int(self.args[0]))
+            obj.user = self.request.user
+        except Vacancy.DoesNotExist:
+            raise Http404
+        return super().form_valid(form)
 
 
 def custom_handler404(request, exception):

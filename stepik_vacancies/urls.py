@@ -18,13 +18,14 @@ from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from vacancies.views import MainView, AllVacanciesView, SpecialtyVacanciesView, CompanyView, VacancyView,\
-    LoginView, LogoutView, SignupView, custom_handler404, custom_handler500
+    ApplicationView, LoginView, LogoutView, SignupView, custom_handler404, custom_handler500
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
     path('vacancies/', AllVacanciesView.as_view(), name='vacancies'),
     re_path(r'^vacancies/cat/([\w-]+)/', SpecialtyVacanciesView.as_view(), name='specialization'),
     re_path(r'^companies/([\d-]+)/', CompanyView.as_view(), name='company'),
+    re_path(r'^vacancies/([\d-]+)/send/', ApplicationView.as_view(), name='application'),
     re_path(r'^vacancies/([\d-]+)/', VacancyView.as_view(), name='vacancy'),
     path('register/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
